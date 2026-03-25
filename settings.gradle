@@ -1,0 +1,2 @@
+rootProject.name = 'inbank_loan_engine'
+include 'backend'

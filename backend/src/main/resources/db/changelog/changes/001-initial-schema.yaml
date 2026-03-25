@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001
+      author: Kert
+      changes:
+        - createTable:
+            tableName: mock_loans
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: segment
+                  type: string
+                  constraints:
+                    nullable: false
