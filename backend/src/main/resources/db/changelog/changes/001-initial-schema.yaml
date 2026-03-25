@@ -13,6 +13,6 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: segment
-                  type: string
+                  type: VARCHAR(20)
                   constraints:
                     nullable: false

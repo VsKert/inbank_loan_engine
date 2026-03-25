@@ -6,7 +6,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 # Set working directory
 WORKDIR /app
 
-COPY build/libs/inbank-loan-engine-SNAPSHOT.jar app.jar
+COPY build/libs/backend-0.0.1-SNAPSHOT.jar app.jar
 
 # Set ownership of the jar file
 RUN chown appuser:appgroup app.jar

@@ -1,5 +1,6 @@
 package proov.inbank.loan_engine.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,11 +9,12 @@ import proov.inbank.loan_engine.dto.LoanResponse;
 
 import java.math.BigDecimal;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DebtException.class)
-    public ResponseEntity<LoanResponse> handleDebtException(DebtException ex) {
+    public ResponseEntity<LoanResponse> handleDebtException() {
         LoanResponse response = LoanResponse.builder().approved(false).amount(BigDecimal.ZERO).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(response);

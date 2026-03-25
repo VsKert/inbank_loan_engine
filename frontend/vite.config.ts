@@ -10,6 +10,21 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  server: {
+    host: true,
+    port: 5173,
+      strictPort: true,
+    hmr: {
+        host: 'localhost',
+        port: 5173
+    },
+      proxy: {
+        '/api': {
+            target: 'http://inbank-loan-engine:8080',
+            changeOrigin: true
+        }
+      }
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

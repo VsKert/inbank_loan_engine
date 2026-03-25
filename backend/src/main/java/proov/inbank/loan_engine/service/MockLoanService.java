@@ -1,6 +1,7 @@
 package proov.inbank.loan_engine.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import proov.inbank.loan_engine.dto.LoanRequest;
 import proov.inbank.loan_engine.dto.LoanResponse;
@@ -14,6 +15,7 @@ import proov.inbank.loan_engine.repository.MockLoanRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MockLoanService {
@@ -27,12 +29,18 @@ public class MockLoanService {
     public LoanResponse requestLoan(LoanRequest request) {
         Long userId = request.getUserId();
         MockLoan userData = mockLoanRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() ->  {
+                    log.info("User with id={} not found.", userId);
+                    return new UserNotFoundException(userId);
+                });
 
         BigDecimal loanAmount = request.getAmount();
         CreditSegment userSegment = userData.getSegment();
 
-        if (userSegment.compare(CreditSegment.DEBT) == 0) throw new DebtException();
+        if (userSegment.compare(CreditSegment.DEBT) == 0) {
+            log.info("Log request for userId={} rejected: user is in debt.", userId);
+            throw new DebtException();
+        }
 
         int loanPeriod = request.getLoanPeriod();
         int userCreditModifier = userSegment.getCreditModifier();
@@ -45,17 +53,35 @@ public class MockLoanService {
                 loanAmount.compareTo(MINIMUM_ALLOWED_LOAN_AMOUNT) >= 0;
         boolean creditApproved = creditScore.compareTo(MINIMUM_APPROVED_CREDIT_SCORE) >= 0;
         boolean decision = loanRangeApproved && creditApproved;
+        log.debug("Loan decision for userId={}: approved={} (rangeApproved={}, creditApproved={}).",
+                userId, decision, loanRangeApproved, creditApproved);
 
         BigDecimal maxLoanAmount = findMaximumLoan(loanPeriod, userCreditModifier);
+        log.debug("Maximum loan amount for userId={} at period={} months: {}.", userId, loanPeriod, maxLoanAmount);
 
         Integer minimumAllowedPeriod = null;
         if (maxLoanAmount.compareTo(MAXIMUM_ALLOWED_LOAN_AMOUNT) >= 0) { // Cap loan amount
+            log.debug("Max loan amount {} exceeds cap for userId={}, capping at {}.",
+                    maxLoanAmount, userId, MAXIMUM_ALLOWED_LOAN_AMOUNT);
             maxLoanAmount = MAXIMUM_ALLOWED_LOAN_AMOUNT;
         } else if (maxLoanAmount.compareTo(MINIMUM_ALLOWED_LOAN_AMOUNT) < 0) {
+            log.info("Max loan amount {} below minimum for userId={}, searching for closest allowed period.",
+                    maxLoanAmount, userId);
             minimumAllowedPeriod = findClosestAllowedLoan(userCreditModifier);
-            if (minimumAllowedPeriod > MAXIMUM_ALLOWED_LOAN_PERIOD) throw new NoAllowedLoanException();
+            log.debug("Closest allowed period for userId={}: {} months.", userId, minimumAllowedPeriod);
+            if (minimumAllowedPeriod > MAXIMUM_ALLOWED_LOAN_PERIOD) {
+                log.info("No valid loan period found for userId={}: minimum period {} exceeds maximum allowed {}.",
+                        userId, minimumAllowedPeriod, MAXIMUM_ALLOWED_LOAN_PERIOD);
+                throw new NoAllowedLoanException();
+            }
             maxLoanAmount = findMaximumLoan(minimumAllowedPeriod, userCreditModifier);
+            log.debug("Recalculated max loan amount for userId={} at adjusted period={} months: {}.",
+                    userId, minimumAllowedPeriod, maxLoanAmount);
         }
+
+
+        log.info("Loan request completed for userId={}: approved={}, maxAmount={}, updatedPeriod={}.",
+                userId, decision, maxLoanAmount, minimumAllowedPeriod);
 
         return LoanResponse.builder()
                 .amount(maxLoanAmount)

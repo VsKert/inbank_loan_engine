@@ -1,0 +1,8 @@
+:root {
+    --color-primary: #E3D2FF;
+}
+
+html, body, #app {
+    height: 100%;
+    margin: 0;
+}
