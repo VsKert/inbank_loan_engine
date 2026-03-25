@@ -17,6 +17,9 @@ Prerequisites: Java 21 installed, Docker Engine running, gradle installed.
 ### Step 1 - build backend:
 in ìnbank_loan_engine/backend run `./gradlew clean build`
 
+
+### Step 2 (Choose one):
+
 ### Step 2a - running prod profile:
 in inbank_loan_engine/backend run `docker compose --profile prod up`
 
