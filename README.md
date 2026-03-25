@@ -25,7 +25,7 @@ In inbank_loan_engine/backend run `docker compose --profile dev up`
 
 ### Step 3:
 Depending on profile, navigate to:
- - DEV: http://localhost:5173/
- - PROD: http://localhost:80/
+ - DEV: `http://localhost:5173/`
+ - PROD: `http://localhost:80/`
 
  If page doesn't resolve, attempt `http://127.0.0.1/{chosen_port}` instead of localhost.
