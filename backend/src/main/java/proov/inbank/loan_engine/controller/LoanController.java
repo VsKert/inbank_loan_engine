@@ -1,5 +1,6 @@
 package proov.inbank.loan_engine.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class LoanController {
     }
 
     @PostMapping("/apply")
-    public ResponseEntity<LoanResponse> requestLoan(@RequestBody LoanRequest request) {
+    public ResponseEntity<LoanResponse> requestLoan(@Valid @RequestBody LoanRequest request) {
         log.info("POST /api/loan/apply - userId={}, loanPeriod={}, amount={}",
                 request.getUserId(), request.getLoanPeriod(), request.getAmount());
         return ResponseEntity.ok(loanService.requestLoan(request));

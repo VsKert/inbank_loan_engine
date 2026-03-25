@@ -9,7 +9,6 @@ import proov.inbank.loan_engine.dto.LoanRequest;
 import proov.inbank.loan_engine.dto.LoanResponse;
 import proov.inbank.loan_engine.entity.CreditSegment;
 import proov.inbank.loan_engine.entity.MockLoan;
-import proov.inbank.loan_engine.exception.DebtException;
 import proov.inbank.loan_engine.repository.MockLoanRepository;
 import proov.inbank.loan_engine.service.MockLoanService;
 
@@ -47,7 +46,7 @@ class LoanEngineTests {
     }
 
     @Test
-    void throwsExceptionOnDebt() {
+    void noAllowedLoanOnDebt() {
         MockLoan loan = new MockLoan();
         loan.setSegment(CreditSegment.DEBT);
 
@@ -59,7 +58,10 @@ class LoanEngineTests {
                 .amount(BigDecimal.valueOf(4000))
                 .loanPeriod(12).build();
 
-        assertThrows(DebtException.class, () -> loanService.requestLoan(request));
+        LoanResponse response = loanService.requestLoan(request);
+
+        assertFalse(response.isApproved());
+        assertEquals(BigDecimal.valueOf(0), response.getAmount());
     }
 
     @Test

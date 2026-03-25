@@ -25,7 +25,7 @@ public class LoanRequest {
     private int loanPeriod;
 
     @NotNull(message = "Loan amount is required.")
-    @Min(value = 2000, message = "Minimum allowed loan amount is 2000.")
-    @Max(value = 10000, message = "Maximum allowed loan amount is 10000.")
+    @Min(value = 2000, message = "Minimum allowed loan amount is 2000€.")
+    @Max(value = 10000, message = "Maximum allowed loan amount is 10000€.")
     private BigDecimal amount;
 }

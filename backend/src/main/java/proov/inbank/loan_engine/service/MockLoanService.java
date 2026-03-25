@@ -7,7 +7,6 @@ import proov.inbank.loan_engine.dto.LoanRequest;
 import proov.inbank.loan_engine.dto.LoanResponse;
 import proov.inbank.loan_engine.entity.CreditSegment;
 import proov.inbank.loan_engine.entity.MockLoan;
-import proov.inbank.loan_engine.exception.DebtException;
 import proov.inbank.loan_engine.exception.NoAllowedLoanException;
 import proov.inbank.loan_engine.exception.UserNotFoundException;
 import proov.inbank.loan_engine.repository.MockLoanRepository;
@@ -39,7 +38,10 @@ public class MockLoanService {
 
         if (userSegment.compare(CreditSegment.DEBT) == 0) {
             log.info("Log request for userId={} rejected: user is in debt.", userId);
-            throw new DebtException();
+            return LoanResponse.builder()
+                    .amount(BigDecimal.ZERO)
+                    .approved(false)
+                    .build();
         }
 
         int loanPeriod = request.getLoanPeriod();

@@ -38,15 +38,31 @@ services:
     command: sh -c "npm install && npm run dev"
     depends_on:
       - inbank-loan-engine
+    profiles: ['dev']
 
-  nginx:
+  nginx-dev:
     image: 'nginx:latest'
-    container_name: nginx
+    container_name: nginx-dev
     ports:
       - '80:80'
     volumes:
-      - './nginx/nginx.conf:/etc/nginx/nginx.conf:ro'
+      - './nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro'
     depends_on:
-      - frontend
+      - frontend-dev
       - inbank-loan-engine
+    profiles: ['dev']
+    restart: always
+
+  nginx-prod:
+    container_name: nginx-prod
+    build:
+      context: '../frontend'
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    volumes:
+      - './nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro'
+    depends_on:
+       - inbank-loan-engine
+    profiles: [ 'prod' ]
     restart: always
