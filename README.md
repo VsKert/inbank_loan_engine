@@ -28,4 +28,4 @@ Depending on profile, navigate to:
  - DEV: http://localhost:5173/
  - PROD: http://localhost:80/
 
- If page doesn't resolve, attempt 127.0.0.1 instead of localhost.
+ If page doesn't resolve, attempt `http://127.0.0.1/{chosen_port}` instead of localhost.
