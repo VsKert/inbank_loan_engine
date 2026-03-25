@@ -1,4 +1,10 @@
-FROM --platform=linux/amd64 eclipse-temurin:25-jre-alpine
+FROM --platform=linux/amd64 gradle:8-jdk21 AS builder
+WORKDIR /app
+COPY . .
+RUN chmod +x gradlew && ./gradlew clean build
+RUN ./gradlew clean build
+
+FROM --platform=linux/amd64 eclipse-temurin:21-jre-alpine
 
 # Create a non-root user for security
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
@@ -6,7 +12,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 # Set working directory
 WORKDIR /app
 
-COPY build/libs/backend-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/build/libs/backend-0.0.1-SNAPSHOT.jar app.jar
 
 # Set ownership of the jar file
 RUN chown appuser:appgroup app.jar
