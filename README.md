@@ -15,13 +15,13 @@ Inbank Intern Test Task
 Prerequisites: Java 21 installed, Docker Engine running.
 
 ### Step 1 - build backend:
-in ìnbank_loan_engine/backend run ./gradlew clean build
+in ìnbank_loan_engine/backend run `./gradlew clean build`
 
 ### Step 2a - running prod profile:
-in inbank_loan_engine/backend run docker compose --profile prod up
+in inbank_loan_engine/backend run `docker compose --profile prod up`
 
 ### Step 2b - running dev profile:
-In inbank_loan_engine/backend run docker compose --profile dev up
+In inbank_loan_engine/backend run `docker compose --profile dev up`
 
 ### Step 3:
 Depending on profile, navigate to:
