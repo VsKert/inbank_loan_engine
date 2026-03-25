@@ -4,3 +4,4 @@ Inbank Intern Test Task
 ## General decisions, tech stack
  - Project uses Java 25 for backend and Vue as frontend framework based on personal preference.
  - PostgreSQL + Liquibase to simulate querying user data from real database.
+ - Due to the smaller and solo nature of the task, decided not to use branches and pull requests for this repository.
