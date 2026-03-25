@@ -1,7 +1,7 @@
 FROM --platform=linux/amd64 gradle:8-jdk21 AS builder
 WORKDIR /app
 COPY . .
-RUN chmod +x gradlew && ./gradlew clean build
+RUN chmod +x gradlew
 RUN ./gradlew clean build
 
 FROM --platform=linux/amd64 eclipse-temurin:21-jre-alpine
