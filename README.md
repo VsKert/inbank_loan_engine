@@ -8,4 +8,4 @@ Inbank Intern Test Task
 
 ## Assumptions
  - When calculating maximum amount of loan that would be allowed, loan period is not modified and method will return the maximum allowed loan in user specified loan period.
- - As per task description, if the scoring algorithm would return a negative decision and no suitable loan amount is found in the user specified period, engine will try to find the closest period (minimal amount) that would be allowed as a loan. Task description is ambiguous in this regard, as it is not specified if this case should return closest suitable period (which seems to be implied) or the maximum allowed loan like the rest of the task.
+ - As per task description, if the scoring algorithm would return a negative decision and no suitable loan amount is found in the user specified period, engine will try to find the closest period (maximal amount in that period) that would be allowed as a loan. Task description is ambiguous in this regard, as it is not specified if this case should return closest suitable period (which seems to be implied) or the maximum allowed loan like the rest of the task.
