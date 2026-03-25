@@ -12,7 +12,7 @@ Inbank Intern Test Task
  - As per task description, if the scoring algorithm would return a negative decision and no suitable loan amount is found in the user specified period, engine will try to find the closest period (maximal amount in that period) that would be allowed as a loan. Task description is ambiguous in this regard, as it is not specified if this case should return closest suitable period (which seems to be implied) or the maximum allowed loan like the rest of the task.
 
 ## How to run project
-Prerequisites: Java 21 installed, Docker Engine running.
+Prerequisites: Java 21 installed, Docker Engine running, gradle installed.
 
 ### Step 1 - build backend:
 in ìnbank_loan_engine/backend run `./gradlew clean build`
@@ -25,5 +25,7 @@ In inbank_loan_engine/backend run `docker compose --profile dev up`
 
 ### Step 3:
 Depending on profile, navigate to:
- - DEV: http://localhost:5173/
- - PROD: http://localhost:80/
+ - DEV: `http://localhost:5173/`
+ - PROD: `http://localhost:80/`
+
+ If page doesn't resolve, attempt `http://127.0.0.1/{chosen_port}` instead of localhost.
